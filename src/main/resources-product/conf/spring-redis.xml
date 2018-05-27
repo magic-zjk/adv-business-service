@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!-- <bean id="redisPropertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
+		<property name="ignoreUnresolvablePlaceholders" value="true" /> <property 
+		name="locations"> <list> <value>classpath*:conf/conf_redis.properties</value> 
+		</list> </property> </bean> -->
+
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxTotal" value="200" />
+		<property name="maxIdle" value="200" />
+		<property name="minIdle" value="10" />
+		<property name="maxWaitMillis" value="30000" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="true" />
+		<property name="testWhileIdle" value="true" />
+	</bean>
+
+	<bean id="redisSentinel_db13" class="redis.clients.jedis.JedisSentinelPool">
+		<constructor-arg index="0" value="${JEDIS.NAME}" />
+		<constructor-arg index="1">
+			<set>
+				<value>${JEDIS.1}</value>
+				<value>${JEDIS.2}</value>
+				<value>${JEDIS.3}</value>
+			</set>
+		</constructor-arg>
+		<constructor-arg index="2" ref="jedisPoolConfig" />
+		<constructor-arg index="3" value="2000" />
+		<constructor-arg index="4" value="${JEDIS.PASSWORD}" />
+		<constructor-arg index="5" value="13" />
+	</bean>
+
+
+
+</beans>

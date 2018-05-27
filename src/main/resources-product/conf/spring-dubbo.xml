@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans        
+    http://www.springframework.org/schema/beans/spring-beans.xsd        
+    http://code.alibabatech.com/schema/dubbo        
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+ 
+    <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+    <dubbo:application name="adv-business-service"  />
+    
+    <!-- 配置拦截器 -->
+<!--	<dubbo:consumer filter="exampleDubboFilter"></dubbo:consumer> -->
+ 	
+    <!-- 使用multicast广播注册中心暴露发现服务地址 -->
+    <dubbo:registry  protocol="zookeeper"  
+    		address="slave01.zookeeper.imopan.com:2181,slave02.zookeeper.imopan.com:2181,slave03.zookeeper.imopan.com:2181"
+    		file="/data/logs/tomcat-mgr/logs/mgr-provider.cache"/>
+<!--     <dubbo:monitor address="127.0.0.1:7070" /> -->
+
+	<!-- 扫描注解包路径，多个包用逗号分隔，不填pacakge表示扫描当前ApplicationContext中所有的类 -->
+<!-- 	<dubbo:annotation package="com.foo.bar.action" /> -->
+ 
+    <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
+<!--     <dubbo:reference id="demoService" interface="com.jacarrichan.demo.lemur.service.DemoService" check="false" />
+     -->
+     
+	<dubbo:reference interface="com.imopan.zbm.api.IAuditOrderService" id="auditOrderService" check="false" />
+	<dubbo:reference interface="com.imopan.zbm.api.IBasicIndicatorService" id="basicIndicatorService" check="false" />
+	<dubbo:reference interface="com.imopan.zbm.api.IUserManagementService" id="userManagementService" check="false" />
+	<dubbo:reference interface="com.imopan.zbm.api.IPutInDetailService" id="putInDetailService" check="false" />
+    <!-- 测试服务分组 -->
+<!-- 	<dubbo:reference id="feedbackDemoService" group="feedback" interface="com.jacarrichan.demo.lemur.service.DemoService" />
+  -->
+</beans>

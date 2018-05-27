@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd 
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd ">
+	<!-- 扫描包基础目录 -->
+	<context:component-scan base-package="com.imopan.adv.platform.task" />
+
+	<!-- 时间策略放在配置文件上，免于代码编译问题 -->
+	<bean name="ocDayTask" class="com.imopan.adv.platform.task.fos.OcDayTask"></bean>
+	<task:scheduled-tasks>
+		<task:scheduled ref="ocDayTask" method="doJob" cron="59 59 16 * * ?" />
+		<!-- <task:scheduled ref="ocDayTask" method="doJob1" fixed-rate="5000"/> -->
+	</task:scheduled-tasks>
+
+	<!-- 识别@Scheduled注解 -->
+	<!-- <task:annotation-driven scheduler="qbScheduler" mode="proxy"/> <task:scheduler 
+		id="qbScheduler" pool-size="10"/> -->
+
+
+
+</beans>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.imopan.adv.platform.mapper.AreaMapper">
+	<resultMap id="AreaListResultMap" type="com.imopan.adv.platform.entity.Area">
+		<result property="areaCode" column="parentNo" />
+		<result property="areaName" column="parentName" />
+		<collection property="areaList" resultMap="AreaResultMap" />
+	</resultMap>
+	<resultMap id="AreaResultMap" type="com.imopan.adv.platform.entity.Area">
+		<result property="areaCode" column="areaNo" />
+		<result property="areaName" column="areaName" />
+	</resultMap>
+	<select id="selectAllArea" resultMap="AreaListResultMap">
+		SELECT
+		b.areaNo AS parentNo,
+		b.areaName AS parentName,
+		a.areaNo,
+		a.areaName
+		FROM
+		sys_area b
+		LEFT JOIN sys_area a ON b.areaNo = a.parentNo
+		WHERE
+		b.parentNo IS NULL
+		AND b.areaNo NOT IN (9999999, 71000, 81000, 82000)
+	</select>
+
+</mapper>

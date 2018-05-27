@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+	<substitutionProperty name="logBase" value="/data/logs/tomcat-mgr/logs" />
+	<!-- 控制台输出日志 -->
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder charset="UTF-8">
+			<!-- <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{26} 
+				- %msg%n</Pattern> -->
+			<Pattern>%d{MM-dd HH:mm:ss.SSS}%-5level %logger{26} - %msg%n</Pattern>
+		</encoder>
+	</appender>
+
+	<!-- 用户操作日志 -->
+	<appender name="baseLogFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${logBase}/base.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${logBase}/base_%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{26} -
+				%msg%n</Pattern>
+		</encoder>
+	</appender>
+
+	<!-- 文件输出日志 (根据时间来制定滚动策略) -->
+	<appender name="fullLogFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${logBase}/full.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${logBase}/full_%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder charset="UTF-8">
+			<Pattern>%d{MM-dd HH:mm:ss.SSS} %-5level %logger{0} - %msg%n</Pattern>
+		</encoder>
+	</appender>
+
+
+	<!-- 按照日志级别屏蔽掉部分日志信息 -->
+
+	<logger name="net.sf.json.JSONObject" additivity="false" level="OFF"></logger>
+	<logger
+		name="org.springframework.beans.factory.support.DefaultListableBeanFactory"
+		additivity="false" level="OFF"></logger>
+	<logger name="org.mongodb.driver.cluster" additivity="false"
+		level="OFF"></logger>
+
+	<!-- 按照业务控制几个不同类型的logger，覆盖默认的累积行为 -->
+	<!-- 此log打印controller入参出参 -->
+	<logger name="com.imopan.adv.platform.interceptor.LogInterceptor" level="debug">
+		<appender-ref ref="baseLogFile" />
+	</logger>
+
+	<root level="info">
+		<appender-ref ref="stdout" />
+		<appender-ref ref="fullLogFile" />
+	</root>
+</configuration>
+
+
+
